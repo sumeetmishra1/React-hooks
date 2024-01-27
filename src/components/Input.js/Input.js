@@ -1,38 +1,38 @@
-import React from'react';
+import React, { useRef ,useImperativeHandle,} from'react';
 import classes from '../Login/Login.module.css'
-const Input = (props)=>{
+const Input = React.forwardRef((props,ref)=>{
+    const InputRef=useRef();
+   
+    const activate=(()=>{
+    InputRef.current.focus();
+    })
+    useImperativeHandle(ref,()=>{
+        return{
+            focus:activate
+        }
+       
+    }
+   
+    )
+   
     return(
-        <React.Fragment>
         <div
           className={`${classes.control} ${
             props.isValid === false ? classes.invalid : ''
           }`}
         >
-          <label htmlFor="email">E-Mail</label>
+          <label htmlFor={props.type}>{props.type}</label>
           <input
-            type="email"
-            id="email"
-            value={props.emailState.value}
-            onChange={props.emailChangeHandler}
-            onBlur={props.validateEmailHandler}
+            ref={InputRef}
+            type={props.type}
+            id={props.id}
+            value={props.state}
+            onChange={props.inputChangeHandler}
+            onBlur={props.validateInputHandler}
           />
         </div>
         
-        <div
-          className={`${classes.control} ${
-            props.passwordState.isValid === false ? classes.invalid : ''
-          }`}
-        >
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={props.passwordState.value}
-            onChange={props.passwordChangeHandler}
-            onBlur={props.validatePasswordHandler}
-          />
-        </div>
-        </React.Fragment>
+       
     )
-}
+})
 export default Input;
